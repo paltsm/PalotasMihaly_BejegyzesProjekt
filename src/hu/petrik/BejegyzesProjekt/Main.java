@@ -1,9 +1,6 @@
 package hu.petrik.BejegyzesProjekt;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -31,13 +28,23 @@ public class Main {
 		}
 		randomLike();
 		bejegyzesEdit();
+		System.out.println();
 		System.out.println("----------------------");
 		for (Bejegyzes bejegyzes : bejegyzesek) {
 			System.out.println(bejegyzes);
 		}
 		likeDolgok();
+		System.out.println();
 		System.out.println("----------------------");
-
+		Rendezes();
+		for (Bejegyzes bejegyzes : bejegyzesek) {
+			System.out.println(bejegyzes);
+		}
+		try {
+			TextIratas();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static void konzolosBejegyzes() {
@@ -101,7 +108,7 @@ public class Main {
 		}
 		System.out.printf("legnépszerűbb poszt likeok: %d",bejegyzesek.get(maxLike).getLikeok());
 		int harmicot=0;
-		int tizenot=0
+		int tizenot=0;
 		for (Bejegyzes bejegyzes:bejegyzesek) {
 
 			if (bejegyzes.getLikeok()>35){
@@ -113,6 +120,30 @@ public class Main {
 		}
 		System.out.printf("%d db posztnak van 35-nél több like",harmicot);
 		System.out.printf("%d db posztnak van 15-nél kevesebb like",tizenot);
+	}
+	public static void Rendezes(){
+
+		for (int i = bejegyzesek.size()-1; i > 0; i--) {
+			for (int j = 0; j <= i-1; j++) {
+				if (bejegyzesek.get(j).getLikeok()<bejegyzesek.get(j+1).getLikeok()){
+					Bejegyzes b1=bejegyzesek.get(j+1);
+					bejegyzesek.set(j+1,bejegyzesek.get(j));
+					bejegyzesek.set(j,b1);
+				}
+			}
+		}
+	}
+	public  static void TextIratas() throws IOException {
+//		+.) A rendezett lista tartalmát írd ki egy bejegyzesek_rendezett.txt fájlba.
+		FileWriter writer=new FileWriter("test.txt");
+		PrintWriter pw=new PrintWriter(writer);
+		for (Bejegyzes bejegyzes:bejegyzesek) {
+			pw.println(bejegyzes);
+		}
+
+		pw.close();
+		writer.close();
+		System.out.println("okos");
 	}
 	public static void bejegyzesekHozzaadasa() {
 		Bejegyzes b1 = new Bejegyzes("Teszt Elek", "tesztelek");
