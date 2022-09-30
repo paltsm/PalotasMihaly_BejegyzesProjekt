@@ -30,9 +30,14 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 		randomLike();
+		bejegyzesEdit();
+		System.out.println("----------------------");
 		for (Bejegyzes bejegyzes : bejegyzesek) {
 			System.out.println(bejegyzes);
 		}
+		likeDolgok();
+		System.out.println("----------------------");
+
 	}
 
 	public static void konzolosBejegyzes() {
@@ -72,9 +77,6 @@ public class Main {
 		}
 		br.close();
 		fr.close();
-//		e.) Kérj be a felhasználótól egy szöveget. A második bejegyzés tartalmát módosítsd a
-//			felhasználó által megadott szövegre.
-//		f.) Írd ki a bejegyzéseket a konzolra.
 	}
 
 	public static void randomLike() {
@@ -83,8 +85,35 @@ public class Main {
 			bejegyzesek.get(index).like();
 		}
 	}
-	
 
+	public static void bejegyzesEdit() {
+		System.out.print("adjon meg egy szöveget: ");
+		String tartalom=sc.nextLine();
+		bejegyzesek.get(1).setTartalom(tartalom);
+	}
+
+	public static void likeDolgok(){
+		int maxLike=0;
+		for (int i = 1; i < bejegyzesek.size(); i++) {
+			if (bejegyzesek.get(maxLike).getLikeok()<bejegyzesek.get(i).getLikeok()){
+				maxLike=i;
+			}
+		}
+		System.out.printf("legnépszerűbb poszt likeok: %d",bejegyzesek.get(maxLike).getLikeok());
+		int harmicot=0;
+		int tizenot=0
+		for (Bejegyzes bejegyzes:bejegyzesek) {
+
+			if (bejegyzes.getLikeok()>35){
+				harmicot++;
+			}
+			if (bejegyzes.getLikeok()<15){
+				tizenot++;
+			}
+		}
+		System.out.printf("%d db posztnak van 35-nél több like",harmicot);
+		System.out.printf("%d db posztnak van 15-nél kevesebb like",tizenot);
+	}
 	public static void bejegyzesekHozzaadasa() {
 		Bejegyzes b1 = new Bejegyzes("Teszt Elek", "tesztelek");
 		Bejegyzes b2 = new Bejegyzes("Gipsz Jakab", "bejegyzés2 ------");
