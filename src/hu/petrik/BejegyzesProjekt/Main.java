@@ -1,5 +1,9 @@
 package hu.petrik.BejegyzesProjekt;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +19,19 @@ public class Main {
 			konzolosBejegyzes();
 		} catch (NumberFormatException e) {
 			System.out.println("nem pozitív egész számot adott meg");
+		}
+		String fajlNev = "bejegyzesek.csv";
+		try {
+			beolvasasosBejegyzes(fajlNev);
+		} catch (FileNotFoundException e) {
+			System.out.println("hiba! nem található az alábbi fájl: " + fajlNev);
+		} catch (IOException e) {
+			System.out.println("ismeretlen hiba történt a forrásfájl olvasása során");
+			System.out.println(e.getMessage());
+		}
+		randomLike();
+		for (Bejegyzes bejegyzes : bejegyzesek) {
+			System.out.println(bejegyzes);
 		}
 	}
 
@@ -38,20 +55,35 @@ public class Main {
 					bejegyzesek.add(new Bejegyzes(szerzo, tartalom));
 				}
 			}
-			for (Bejegyzes bejegyzes : bejegyzesek) {
-				System.out.println(bejegyzes);
-			}
 
 		}
-//		c.) A bejegyzesek.csv további bejegyzéseket tartalmaz az alábbi formában:
-//			szerzo;tartalom
-//		Olvasd be a fájlt és a tartalmát add hozzá a listához.
-//		d.) Ossz ki véletlenszerűen hússzor annyi likeot mint ahány bejegyzés található a listában. (pl.
-//			10 bejegyzés esetén 200 like kerüljön kiosztásra)
+
+	}
+
+	public static void beolvasasosBejegyzes(String fajlNev) throws IOException {
+		FileReader fr = new FileReader(fajlNev);
+		BufferedReader br = new BufferedReader(fr);
+		String sor = br.readLine();
+		while (sor != null && !sor.isEmpty()) {
+			String[] adatok = sor.split(";");
+			Bejegyzes bejegyzes = new Bejegyzes(adatok[0], adatok[1]);
+			bejegyzesek.add(bejegyzes);
+			sor = br.readLine();
+		}
+		br.close();
+		fr.close();
 //		e.) Kérj be a felhasználótól egy szöveget. A második bejegyzés tartalmát módosítsd a
 //			felhasználó által megadott szövegre.
 //		f.) Írd ki a bejegyzéseket a konzolra.
 	}
+
+	public static void randomLike() {
+		for (int i = 0; i < 20 * bejegyzesek.size(); i++) {
+			int index = (int) (Math.random() * bejegyzesek.size());
+			bejegyzesek.get(index).like();
+		}
+	}
+	
 
 	public static void bejegyzesekHozzaadasa() {
 		Bejegyzes b1 = new Bejegyzes("Teszt Elek", "tesztelek");
