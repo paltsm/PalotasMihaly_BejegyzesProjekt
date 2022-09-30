@@ -1,6 +1,8 @@
 package hu.petrik.BejegyzesProjekt;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Bejegyzes {
 	private String szerzo;
@@ -17,6 +19,11 @@ public class Bejegyzes {
 		return tartalom;
 	}
 
+	public void setTartalom(String tartalom) {
+		this.tartalom = tartalom;
+		this.szerkesztve = LocalDateTime.now();
+	}
+
 	public int getLikeok() {
 		return likeok;
 	}
@@ -29,25 +36,34 @@ public class Bejegyzes {
 		return szerkesztve;
 	}
 
+
 	public Bejegyzes(String szerzo, String tartalom) {
 		this.szerzo = szerzo;
 		this.tartalom = tartalom;
+		this.likeok = 0;
+		this.letrejott = LocalDateTime.now();
+		this.szerkesztve =  this.letrejott;
+	}
+	public Bejegyzes(){
+		this.szerzo="Teszt Elek";
+		this.tartalom="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, nostrum.";
+		this.likeok = 0;
+		this.letrejott = LocalDateTime.now();
+		this.szerkesztve =  this.letrejott;
 	}
 
-	public void setTartalom(String tartalom) {
-		this.tartalom = tartalom;
+	public void like() {
+		this.likeok++;
 	}
-	public void like(){
 
+	@Override
+	public String toString() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return String.format("%s - %d - %s" +
+						"%s" +
+						"\n%s\n",
+				this.szerzo, this.likeok, this.letrejott.format(formatter),
+				(!Objects.equals(this.szerkesztve, this.letrejott)) ? "\nSzerkesztve: "+this.szerkesztve.format(formatter) : "",
+				this.tartalom);
 	}
-//	Az osztály példányosításakor állítsa be a likeok számát 0-ra, a létrehozás és a
-//	szerkesztés idejét pedig az aktuális időpontra (konstruktorban készítsd el).
-//	• A tartalom módosításakor változzon a szerkesztés ideje is az aktuális időpontra
-//	(tartalom setterjében készítsd el).
-//	• A like() eljárás növelje a likeok számát 1-el.
-//	c.) Írd felül a beépített toString() függvényt, hogy visszaadja az adatokat az alábbi formában:
-//	szerzo – likeok – letrejott
-//	Szerkeszve: szerkesztes
-//			tartalom
-//+.) Csak akkor írja ki a szerkesztés dátumát, ha a bejegyzés módosítva lett.
 }
